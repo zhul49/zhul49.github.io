@@ -1,0 +1,15 @@
+---
+layout: default
+modal-id: 3
+date: 2025-12-18
+title: Vision-Guided Pen Grasping
+img: pen_grasp.gif
+alt: Robot Arm Grasping a Pen
+project-date: Dec 2025
+client: "Franka Panda"
+category: "Perception • Manipulation • Robotics"
+
+description: "A robot arm that detects a pen using a camera and autonomously grasps it with accurate positioning."
+
+tech: "Computer vision · YOLO-based object detection · Franka Panda robot · ROS 2 · MoveIt 2 motion planning · Grasp execution"
+---
