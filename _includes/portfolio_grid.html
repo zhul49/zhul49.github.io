@@ -24,12 +24,27 @@
         <div class="portfolio-card-text">
           <h3>{{ post.title | default: post.alt }}</h3>
           <p>{{ post.description }}</p>
-          
-          {% if post.tech %}
-            <div class="portfolio-tech">
-              {{ post.tech }}
+
+          {% if post.tags or post.tech %}
+            <div class="tag-divider"></div>
+          {% endif %}
+
+          {% if post.tags %}
+            <div class="project-tags">
+              {% for tag in post.tags %}
+                <span class="tag-chip">{{ tag }}</span>
+              {% endfor %}
+            </div>
+          {% elsif post.tech %}
+            <div class="project-tags">
+              {% assign tech_list = post.tech | split: "·" %}
+              {% for tag in tech_list %}
+                <span class="tag-chip">{{ tag | strip }}</span>
+              {% endfor %}
             </div>
           {% endif %}
+
+
         </div>
       </div>
       {% endfor %}

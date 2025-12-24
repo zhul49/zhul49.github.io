@@ -1,15 +1,47 @@
 ---
-layout: default
+layout: post
 modal-id: 3
 date: 2025-12-18
 title: Vision-Guided Pen Grasping
 img: pen_grasp.gif
 alt: Robot Arm Grasping a Pen
 project-date: Dec 2025
-client: "Franka Panda"
-category: "Perception • Manipulation • Robotics"
+#client: "Franka Panda"
+#category: "Perception • Manipulation • Robotics"
 
 description: "A robot arm that detects a pen using a camera and autonomously grasps it with accurate positioning."
 
-tech: "Computer vision · YOLO-based object detection · Franka Panda robot · ROS 2 · MoveIt 2 motion planning · Grasp execution"
+#tech: "Computer vision · YOLO-based object detection · Franka Panda robot · ROS 2 · MoveIt 2 motion planning · Grasp execution"
+tags:
+  - OpenCV
+  - Camera-to-Robot TF
+  - Interbotix PX100
+  - Python
+
+github: https://github.com/zhul49/Pickup-Pen
 ---
+
+## Overview
+This project implements a vision-guided grasping system for a robotic arm that autonomously detects and grasps a pen using an RGB-D camera. The objective was to build a complete perception-to-action pipeline that converts raw camera data into executable robot motion, enabling the robot to locate and grasp a pen without manual alignment or human intervention.
+
+The task was intentionally constrained to a known object type and workspace, allowing the system to emphasize robustness, accuracy, and correct geometric reasoning rather than general-purpose object recognition.
+
+## Perception and Localization
+Perception was implemented using classical computer vision techniques. Since the target object was a **purple pen**, the RGB image was converted to the HSV color space and color thresholding was applied to segment purple regions from the background. Depth data from the RealSense camera was used to remove background pixels beyond a fixed range, improving robustness under clutter and lighting variation.
+
+Contours were extracted from the segmented mask, and the most relevant contour was selected based on geometric properties. From this contour, the pen’s image-space centroid and orientation were estimated. The centroid pixel was aligned with the depth image, and the corresponding depth value was used to deproject the pixel into a 3D point in the camera coordinate frame using the camera intrinsics. To reduce sensor noise, multiple measurements were collected over a short time window and averaged.
+
+![Pen detection overlay](/img/portfolio/cabin.png)
+
+## Coordinate Transformation and Grasp Execution
+The 3D pen position estimated in the camera frame was transformed into the robot base frame using a precomputed camera-to-robot extrinsic calibration. This calibration was represented as a rigid-body transform consisting of a rotation matrix \(R\) and translation vector \(t\), applied directly as:
+
+<p style="text-align:center; font-size: 1.15em;">
+  P<sub>robot</sub> = R · P<sub>camera</sub> + t
+</p>
+
+A small tool offset was then added to account for the physical geometry of the gripper.
+
+Once the target position was expressed in the robot frame, the **PincherX 100** arm was controlled using direct API commands. The robot moved to a hover pose above the pen, descended to the grasp location, closed the gripper, lifted the object to verify a successful grasp, and returned to a safe pose. This demonstrated a complete vision-driven manipulation pipeline operating under real sensor noise and hardware constraints.
+
+
