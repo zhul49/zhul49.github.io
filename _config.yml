@@ -33,8 +33,10 @@ color:
 # Footer settings
 footer:
   copyright: Robert Zhu
-  location: Evanston Illinois
-  social: Around the Web
+  location: Address
+  social: Contact me
+
+credits: "Master of Science in Robotics<br>Northwestern University"
 
 # Social networks usernames (many more available: google-plus, flickr, dribbble, pinterest, instagram, tumblr, linkedin, etc.)
 social:
@@ -42,6 +44,8 @@ social:
     url: http://linkedin.com/in/robert-zhu1
   - title: github
     url: http://github.com/zhul49
+  - title: envelope
+    url: mailto:robertzhu778@gmail.com
 
 # Postal address (add as many lines as necessary)
 address:
