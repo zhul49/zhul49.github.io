@@ -1,2 +1,63 @@
 {% include css/bootstrap.min.css %}
 {% include css/main.css %}
+
+/* =========================================================
+   HERO: projects-first (compact), bigger avatar, no clipping
+   ========================================================= */
+
+/* Header sits below fixed navbar (prevents clipping) */
+header {
+  margin-top: 92px;                 /* tune 85–100 if needed */
+  padding: 18px 0 0px !important;   /* remove extra green under name */
+  overflow: visible;
+}
+
+/* Tighten spacing inside header */
+header .container,
+header .row,
+header .col-lg-12 {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Bigger avatar (centered) */
+header img.img-responsive {
+  width: 180px;                     /* icon size */
+  max-width: 180px;
+  height: auto;
+  margin: 0 auto 10px !important;
+}
+
+/* Tight name stack */
+header .intro-text {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+header .intro-text .name {
+  font-size: 44px;
+  line-height: 1.05;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Remove divider + skills line from hero */
+header hr.star-light,
+header .intro-text .skills {
+  display: none !important;
+}
+
+/* =========================================================
+   PORTFOLIO: pull section up a bit (polish)
+   ========================================================= */
+
+#portfolio {
+  padding-top: 36px !important;
+}
+
+/* Reduce extra whitespace above the "PORTFOLIO" heading */
+#portfolio .container {
+  padding-top: 0 !important;
+}

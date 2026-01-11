@@ -31,7 +31,7 @@ Perception was implemented using classical computer vision techniques. Since the
 
 Contours were extracted from the segmented mask, and the most relevant contour was selected based on geometric properties. From this contour, the pen’s image-space centroid and orientation were estimated. The centroid pixel was aligned with the depth image, and the corresponding depth value was used to deproject the pixel into a 3D point in the camera coordinate frame using the camera intrinsics. To reduce sensor noise, multiple measurements were collected over a short time window and averaged.
 
-![Pen detection overlay](/img/portfolio/cabin.png)
+<!-- ![Pen detection overlay](/img/portfolio/cabin.png) -->
 
 ## Coordinate Transformation and Grasp Execution
 The 3D pen position estimated in the camera frame was transformed into the robot base frame using a precomputed camera-to-robot extrinsic calibration. This calibration was represented as a rigid-body transform consisting of a rotation matrix \(R\) and translation vector \(t\), applied directly as:
