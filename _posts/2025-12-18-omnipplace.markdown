@@ -2,6 +2,7 @@
 layout: post
 modal-id: 1
 date: 2025-12-18
+featured: true
 title: Autonomous Pick-and-Place
 img: omniplace.gif
 alt: OmniPlace
@@ -24,16 +25,23 @@ github: https://github.com/ME495-EmbeddedSystems/final-project-superawesometeam
 OmniPlace is an autonomous pick and place system built on **ROS 2** for a **Franka Panda** with an **Intel RealSense** camera. The robot scans a tabletop, detects both **objects** (squares, rectangles, cylinders) and **targets** (their flat cross sections), matches each object to the correct target, and executes pick and place until no targets remain.
 
 ## System diagrams
-The setup diagram shows the real hardware and how perception connects to the robot.
 
-![User setup diagram](/img/portfolio/omniplace_setup_diagram.png)
-
-The subsystem diagram shows the software pipeline from sensing to planning and execution.
-
-![Subsystem block diagram](/img/portfolio/omniplace_subsystem.png)
+<div style="display: flex; gap: 24px; margin: 20px 0; flex-wrap: wrap; align-items: flex-start;">
+  <div style="flex: 1; min-width: 260px;">
+    <img src="/img/portfolio/omniplace_setup_diagram.png" class="img-responsive" alt="User setup diagram">
+    <p class="img-caption">Hardware setup: objects, camera, and robot arm</p>
+  </div>
+  <div style="flex: 1; min-width: 260px;">
+    <img src="/img/portfolio/omniplace_subsystem.png" class="img-responsive" alt="Subsystem block diagram">
+    <p class="img-caption">Software pipeline from sensing to planning and execution</p>
+  </div>
+</div>
 
 ## Perception pipeline (YOLO-OBB and detection stabilization)
+
 Perception is handled by a YOLO-based detector that outputs **oriented bounding boxes**, providing both object position and in-plane rotation directly from the image. Rather than relying on single-frame detections, the system performs a structured scan of the workspace and aggregates detections across multiple frames.
+
+<img src="/img/portfolio/omniplace_yolo.gif" style="display:block; margin: 16px auto; max-width: 75%; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.12);" alt="YOLO OBB detection">
 
 Detections are associated over time by comparing center location, shape class, bounding box dimensions, and orientation. Candidates that do not appear consistently across the scan window are discarded as noise. This temporal filtering produces a stable set of object and target poses that can be safely used for motion planning.
 
@@ -41,11 +49,8 @@ To train the YOLO model, a **Python-based synthetic data generation pipeline** w
 
 Objects and targets are distinguished using a height-based heuristic. Targets are flat cross-sections placed on the table, while objects have nonzero height. This separation allows the system to independently build object and target sets and perform shape-based matching between them.
 
-<p align="center">
-  <img src="img/portfolio/omniplace_yolo.gif" width="700">
-</p>
-
 ## Motion Planning and Task Execution
+
 Motion planning is handled through a custom Python interface built on top of MoveIt 2, designed to simplify interaction with the robot while still exposing fine control when needed. Instead of calling MoveIt APIs directly throughout the codebase, the system is structured around a small set of modular wrappers that separate state queries, planning logic, and environment management.
 
 The motion planning interface provides utilities for querying the robot’s current state, generating collision-aware trajectories, and executing both Cartesian and joint-space motions. A dedicated planning scene manager dynamically adds and removes collision objects corresponding to detected items and targets, ensuring that planned motions remain valid as the workspace changes. All motion commands are funneled through a single high-level interface that exposes actions such as moving to poses, executing grasps, and controlling the gripper, keeping task logic clean and readable.
@@ -54,5 +59,4 @@ Task execution is coordinated by a central control script that drives the full p
 
 Objects are matched to targets based on shape and size, and the robot executes pick-and-place operations one pair at a time. After each attempt, the system re-scans the workspace rather than assuming a static scene. This design allows the robot to recover from failed grasps, handle objects being moved during execution, and remain robust to detection ordering changes. The task continues until no valid targets remain, at which point the robot safely returns to its home position.
 
-## TF Tree
-![TF Tree diagram](/img/portfolio/tf_frames.png)
+<img src="/img/portfolio/tf_frames.png" style="display:block; margin: 16px auto; max-width: 70%; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.12);" alt="TF Tree diagram">

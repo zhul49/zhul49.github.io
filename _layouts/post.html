@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{{ page.title }} | {{ site.title }}</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="{{ page.description | default: site.description }}">
+  <link rel="canonical" href="{{ page.url | prepend: site.url }}">
+
+  <!-- Custom CSS & Bootstrap Core CSS -->
+  <link rel="stylesheet" href="{{ site.url }}/style.css">
+
+  <!-- Custom Fonts -->
+  <link rel="stylesheet" href="{{ site.url }}/css/font-awesome/css/all.min.css">
+  <link href="//fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href="//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body id="page-top">
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{{ site.url }}">{{ site.title }}</a>
+      </div>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="{{ site.url }}/#portfolio">Portfolio</a></li>
+          <li><a href="{{ site.url }}/#about">About</a></li>
+          <li><a href="{{ site.url }}/#contact">Contact</a></li>
+          <li class="nav-resume">
+            <a href="{{ site.url }}/resume.pdf" target="_blank" rel="noopener">Resume</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Project Detail -->
+  <section id="project-detail">
+    <div class="container-fluid" style="max-width: 1100px; padding: 0 40px;">
+      <div class="row">
+        <div class="col-lg-12">
+
+          <div class="text-center">
+            <h2>{{ page.title }}</h2>
+            <hr class="star-primary">
+          </div>
+
+          {% if page.img contains '.mp4' %}
+            <video class="img-responsive img-centered" autoplay loop muted playsinline>
+              <source src="{{ site.url }}/img/portfolio/{{ page.img }}" type="video/mp4">
+            </video>
+          {% else %}
+            <img src="{{ site.url }}/img/portfolio/{{ page.img }}" class="img-responsive img-centered" alt="{{ page.alt }}">
+          {% endif %}
+
+          {% if page.description %}
+            <p class="lead" style="margin-top: 20px;">{{ page.description }}</p>
+          {% endif %}
+
+          {% if page.tags %}
+            <div class="project-tags" style="margin-bottom: 20px; justify-content: center;">
+              {% for tag in page.tags %}
+                <span class="tag-chip">{{ tag }}</span>
+              {% endfor %}
+            </div>
+          {% elsif page.tech %}
+            <div class="project-tags" style="margin-bottom: 20px; justify-content: center;">
+              {% assign tech_list = page.tech | split: "·" %}
+              {% for tag in tech_list %}
+                <span class="tag-chip">{{ tag | strip }}</span>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <div class="modal-details">
+            {{ content }}
+          </div>
+
+          {% if page.github %}
+            <p style="margin-top: 25px; text-align: center;">
+              <a href="{{ page.github }}" target="_blank" rel="noopener" style="font-size: 1.1em; text-decoration: none;">
+                <i class="fab fa-github" style="font-size: 1.6em; vertical-align: middle;"></i>
+                <span style="margin-left: 8px;">View Code on GitHub</span>
+              </a>
+            </p>
+          {% endif %}
+
+          <div style="margin-top: 40px; text-align: center;">
+            <a href="{{ site.url }}/#portfolio" class="btn btn-primary">
+              <i class="fa fa-arrow-left"></i> Back to Portfolio
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% include footer.html %}
+
+  <script src="{{ site.url }}/js/jquery-1.11.0.js"></script>
+  <script src="{{ site.url }}/js/bootstrap.min.js"></script>
+  <script src="{{ site.url }}/js/freelancer.js"></script>
+
+</body>
+</html>

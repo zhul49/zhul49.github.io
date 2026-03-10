@@ -1,0 +1,101 @@
+---
+layout: post
+modal-id: 4
+date: 2025-12-19
+featured: true
+title: Hand2Rob
+img: Cup_thumbnail.mp4
+alt: Hand2Rob
+project-date: Dec 2025
+description: "Teaching robots to grasp delicate objects by learning from human hand demonstrations with tactile feedback."
+tags:
+  - Python
+  - Imitation Learning
+  - Tactile Sensing
+  - Computer Vision
+  - PyTorch
+  - LibFranka
+github: https://github.com/your-repo-link
+---
+
+## Data Collection and Annotation
+
+<div class="clearfix">
+<video class="float-right" autoplay loop muted playsinline>
+  <source src="{{ site.url }}/img/portfolio/Mediapipe_Pingpong.mp4" type="video/mp4">
+</video>
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+
+Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet consectetur adipisci velit.
+</div>
+
+## Translating Points to Franka End Points
+
+<div class="clearfix">
+<video class="float-left" autoplay loop muted playsinline>
+  <source src="{{ site.url }}/img/portfolio/handtorobot.mp4" type="video/mp4">
+</video>
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.
+
+Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti.
+</div>
+
+## CAD Models
+
+<div style="display: flex; gap: 24px; margin: 20px 0; flex-wrap: wrap; align-items: flex-start; justify-content: center;">
+  <div style="flex: 0 1 260px; text-align: center;">
+    <img src="{{ site.url }}/img/portfolio/gripper_without_sensor.png" class="img-responsive" style="margin: 0 auto; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.10);" alt="Gripper without sensor">
+    <p style="margin-top: 8px; font-size: 0.9em; color: #666;">Gripper without sensor</p>
+  </div>
+  <div style="flex: 0 1 260px; text-align: center;">
+    <img src="{{ site.url }}/img/portfolio/gripper_with_sensor.png" class="img-responsive" style="margin: 0 auto; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.10);" alt="Gripper with sensor">
+    <p style="margin-top: 8px; font-size: 0.9em; color: #666;">Gripper with ResKin tactile sensor</p>
+  </div>
+</div>
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+
+## Robot Execution
+
+<div class="clearfix">
+<video class="float-right" autoplay loop muted playsinline style="width: 30% !important; max-width: 30% !important;">
+  <source src="{{ site.url }}/img/portfolio/Egg_cracked.mp4" type="video/mp4">
+</video>
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.
+
+Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.
+
+Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet.
+</div>
+
+<div class="clearfix">
+<video class="float-left" autoplay loop muted playsinline style="width: 30% !important; max-width: 30% !important;">
+  <source src="{{ site.url }}/img/portfolio/Egg_saved.mp4" type="video/mp4">
+</video>
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.
+
+Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.
+
+Similique sunt in culpa qui officia deserunt mollitia animi id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio nam libero tempore cum soluta nobis eligendi.
+</div>
+
+<div style="display: flex; gap: 4px; margin: 20px auto; flex-wrap: nowrap; align-items: flex-start; max-width: 560px;">
+  <div style="flex: 1;">
+    <video class="img-responsive" autoplay loop muted playsinline style="border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.12);">
+      <source src="{{ site.url }}/img/portfolio/egg1.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div style="flex: 1;">
+    <video class="img-responsive" autoplay loop muted playsinline style="border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.12);">
+      <source src="{{ site.url }}/img/portfolio/egg2.mp4" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.

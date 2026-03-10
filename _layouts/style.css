@@ -50,6 +50,45 @@ header .intro-text .skills {
 }
 
 /* =========================================================
+   MOBILE NAV: make hamburger button visible on dark navbar
+   ========================================================= */
+
+.navbar-default .navbar-toggle {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #fff;
+}
+
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Dropdown menu on mobile */
+@media (max-width: 767px) {
+  .navbar-collapse {
+    background-color: #2c3e50;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .navbar-default .navbar-nav > li > a {
+    color: #fff !important;
+  }
+
+  .navbar-default .navbar-nav > li > a:hover {
+    color: #18bc9c !important;
+  }
+
+  /* Lock logo to top of navbar header row, ignore menu expansion */
+  .navbar-logo-center {
+    top: 13px;
+    transform: translateX(-50%);
+  }
+}
+
+/* =========================================================
    PORTFOLIO: pull section up a bit (polish)
    ========================================================= */
 
@@ -60,4 +99,108 @@ header .intro-text .skills {
 /* Reduce extra whitespace above the "PORTFOLIO" heading */
 #portfolio .container {
   padding-top: 0 !important;
+}
+
+/* Make card thumbnails fill the full card width */
+#portfolio .portfolio-item .portfolio-link {
+  max-width: 100% !important;
+}
+
+/* Featured cards: always 2 columns, larger */
+@media (min-width: 640px) {
+  .portfolio-featured-row .portfolio-flex-item {
+    flex: 1 1 calc(50% - 28px) !important;
+    max-width: calc(50% - 28px) !important;
+  }
+}
+
+/* Section labels (Featured / Other Projects) */
+.portfolio-section-label {
+  width: 100%;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #2c3e50;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e0e0e0;
+  margin-bottom: 28px;
+}
+
+/* Match video border-radius to images in portfolio cards */
+#portfolio .portfolio-item video {
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  margin-bottom: 14px;
+}
+
+/* =========================================================
+   PROJECT DETAIL PAGE
+   ========================================================= */
+
+#project-detail {
+  padding-top: 110px;
+  padding-bottom: 60px;
+}
+
+#project-detail h2 {
+  margin-bottom: 10px;
+}
+
+#project-detail .modal-details {
+  margin-top: 30px;
+  text-align: left;
+  line-height: 1.7;
+}
+
+#project-detail .modal-details h2,
+#project-detail .modal-details h3 {
+  margin-top: 30px;
+}
+
+#project-detail .img-centered {
+  margin: 20px auto;
+}
+
+/* Float images beside text */
+.float-right {
+  float: right;
+  max-width: 45% !important;
+  width: 45% !important;
+  margin: 0 0 20px 28px !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+}
+
+.float-left {
+  float: left;
+  max-width: 45% !important;
+  width: 45% !important;
+  margin: 0 28px 20px 0 !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+}
+
+/* Clear floats after a section */
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+@media (max-width: 767px) {
+  .float-right,
+  .float-left {
+    float: none;
+    max-width: 100%;
+    margin: 16px auto !important;
+    display: block;
+  }
+}
+
+/* Fix Font Awesome 5 star icon in hr.star-primary / hr.star-light */
+hr.star-primary:after,
+hr.star-light:after {
+  font-family: "Font Awesome 5 Free" !important;
+  font-weight: 900 !important;
 }
