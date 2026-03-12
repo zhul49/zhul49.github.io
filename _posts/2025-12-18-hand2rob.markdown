@@ -18,13 +18,6 @@ tags:
 github: https://github.com/zhul49/-Hand2Rob_Lamb
 ---
 
-## System Architecture
-
-<div style="text-align: center; margin: 20px 0;">
-  <img src="{{ site.url }}/img/portfolio/Screenshot from 2026-03-12 13-59-44.png" class="img-responsive" style="margin: 0 auto; max-width: 600px; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.10);" alt="Hand2Rob system architecture">
-  <p style="margin-top: 10px; font-size: 0.9em; color: #666;"><strong>Figure 1.</strong> Overview of the Hand2Rob pipeline. Stereo camera footage and MediaPipe hand tracking are processed through CoTracker and stereo triangulation to build the dataset. A training policy learns both the end-effector trajectory and force grasping, which are deployed on the Franka robot with ResKin tactile feedback for manipulating fragile objects.</p>
-</div>
-
 ## Data Collection and Annotation
 
 <div class="clearfix">
@@ -80,6 +73,13 @@ With the ResKin sensor in the loop, the robot can feel how much force it is appl
 </div>
 
 Above are two evaluation runs showing the full pipeline end-to-end: the robot approaches the egg, descends to the grasp position, and closes with force-controlled grip. Each camera view is shown separately, with the live force reading overlaid in blue. The consistency across runs demonstrates that the learned policy generalizes reliably from the human demonstrations.
+
+## System Architecture
+
+<div style="text-align: center; margin: 20px 0;">
+  <img src="{{ site.url }}/img/portfolio/Screenshot from 2026-03-12 13-59-44.png" class="img-responsive" style="margin: 0 auto; max-width: 600px; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.10);" alt="Hand2Rob system architecture">
+  <p style="margin-top: 10px; font-size: 0.9em; color: #666;"><strong>Figure 1.</strong> Overview of the Hand2Rob pipeline. Stereo camera footage and MediaPipe hand tracking are processed through CoTracker and stereo triangulation to build the dataset. A training policy learns both the end-effector trajectory and force grasping, which are deployed on the Franka robot with ResKin tactile feedback for manipulating fragile objects.</p>
+</div>
 
 ## CAD Models
 
