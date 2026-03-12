@@ -45,38 +45,26 @@ I collect demonstrations by having a human perform the task barehanded in front 
 The core challenge is mapping a human hand demonstration onto a robot gripper that has far fewer degrees of freedom. The tracked 2D keypoints are triangulated across both camera views to recover 3D positions, and a rigid transformation aligns the human hand's keypoint cloud to the robot's end-effector frame. This produces a full 6-DoF pose trajectory and a gripper open/close signal derived from the distance between the thumb and index finger. The result is a set of robot-executable actions that faithfully reproduce the spatial intent of the original human demonstration.
 </div>
 
-## CAD Models
-
-<div style="display: flex; gap: 24px; margin: 20px 0; flex-wrap: wrap; align-items: flex-start; justify-content: center;">
-  <div style="flex: 0 1 260px; text-align: center;">
-    <img src="{{ site.url }}/img/portfolio/gripper_without_sensor.png" class="img-responsive" style="margin: 0 auto; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.10);" alt="Gripper without sensor">
-    <p style="margin-top: 8px; font-size: 0.9em; color: #666;">Gripper without sensor</p>
-  </div>
-  <div style="flex: 0 1 260px; text-align: center;">
-    <img src="{{ site.url }}/img/portfolio/gripper_with_sensor.png" class="img-responsive" style="margin: 0 auto; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.10);" alt="Gripper with sensor">
-    <p style="margin-top: 8px; font-size: 0.9em; color: #666;">Gripper with ResKin tactile sensor</p>
-  </div>
-</div>
-
-Special thanks to Miguel Pegues for helping me design custom gripper fingertips to house the ResKin magnetometer-based tactile sensor. The left model shows the standard Franka gripper fingers, while the right model integrates a recessed pocket that secures the ResKin sensing pad flush against the contact surface.
-
 ## Robot Execution
 
-<div class="clearfix">
-<video class="float-right" autoplay loop muted playsinline style="width: 30% !important; max-width: 30% !important;">
-  <source src="{{ site.url }}/img/portfolio/Egg_cracked.mp4" type="video/mp4">
-</video>
+<div style="display: flex; gap: 16px; margin: 20px auto; flex-wrap: nowrap; align-items: flex-start; max-width: 560px;">
+  <div style="flex: 1; text-align: center;">
+    <video class="img-responsive" autoplay loop muted playsinline style="border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.12);">
+      <source src="{{ site.url }}/img/portfolio/Egg_cracked.mp4" type="video/mp4">
+    </video>
+    <p style="margin-top: 8px; font-size: 0.9em; color: #666;">Without force feedback</p>
+  </div>
+  <div style="flex: 1; text-align: center;">
+    <video class="img-responsive" autoplay loop muted playsinline style="border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.12);">
+      <source src="{{ site.url }}/img/portfolio/Egg_saved.mp4" type="video/mp4">
+    </video>
+    <p style="margin-top: 8px; font-size: 0.9em; color: #666;">With ResKin force control</p>
+  </div>
+</div>
 
 Without force feedback, the robot has no way to modulate its grip strength, it simply closes the gripper until the binary close command is fully executed. For fragile objects like eggs, this can lead to it breaking. Here the robot successfully reaches and grasps the egg using the learned trajectory, but the uncontrolled gripper force crushes it. This failure motivates the need for closed-loop force control during the grasp phase.
-</div>
-
-<div class="clearfix">
-<video class="float-left" autoplay loop muted playsinline style="width: 30% !important; max-width: 30% !important;">
-  <source src="{{ site.url }}/img/portfolio/Egg_saved.mp4" type="video/mp4">
-</video>
 
 With the ResKin sensor in the loop, the robot can feel how much force it is applying and stop closing once a target threshold is reached. The force controller reads the live tactile signal and adjusts the gripper incrementally, holding the egg securely without exceeding the pressure that would crack it. The same learned trajectory is used — only the grasp execution changes. This demonstrates that combining learned spatial policies with real-time tactile feedback enables safe manipulation of objects that would otherwise be destroyed.
-</div>
 
 <div style="display: flex; gap: 4px; margin: 20px auto; flex-wrap: nowrap; align-items: flex-start; max-width: 560px;">
   <div style="flex: 1;">
@@ -92,3 +80,18 @@ With the ResKin sensor in the loop, the robot can feel how much force it is appl
 </div>
 
 Above are two evaluation runs showing the full pipeline end-to-end: the robot approaches the egg, descends to the grasp position, and closes with force-controlled grip. Each camera view is shown separately, with the live force reading overlaid in blue. The consistency across runs demonstrates that the learned policy generalizes reliably from the human demonstrations.
+
+## CAD Models
+
+<div style="display: flex; gap: 24px; margin: 20px 0; flex-wrap: wrap; align-items: flex-start; justify-content: center;">
+  <div style="flex: 0 1 260px; text-align: center;">
+    <img src="{{ site.url }}/img/portfolio/gripper_without_sensor.png" class="img-responsive" style="margin: 0 auto; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.10);" alt="Gripper without sensor">
+    <p style="margin-top: 8px; font-size: 0.9em; color: #666;">Gripper without sensor</p>
+  </div>
+  <div style="flex: 0 1 260px; text-align: center;">
+    <img src="{{ site.url }}/img/portfolio/gripper_with_sensor.png" class="img-responsive" style="margin: 0 auto; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.10);" alt="Gripper with sensor">
+    <p style="margin-top: 8px; font-size: 0.9em; color: #666;">Gripper with ResKin tactile sensor</p>
+  </div>
+</div>
+
+Special thanks to Miguel Pegues for helping me design custom gripper fingertips to house the ResKin magnetometer-based tactile sensor. The left model shows the standard Franka gripper fingers, while the right model integrates a recessed pocket that secures the ResKin sensing pad flush against the contact surface.
