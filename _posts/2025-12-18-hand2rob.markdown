@@ -17,7 +17,6 @@ tags:
   - LibFranka
 github: https://github.com/zhul49/-Hand2Rob_Lamb
 ---
-
 ## Data Collection and Annotation
 
 <div class="clearfix">
@@ -25,7 +24,7 @@ github: https://github.com/zhul49/-Hand2Rob_Lamb
   <source src="{{ site.url }}/img/portfolio/Mediapipe_Pingpong.mp4" type="video/mp4">
 </video>
 
-I collect demonstrations by having a human perform the task barehanded in front of two calibrated cameras. MediaPipe tracks the hand in real time, extracting semantic keypoints on the fingers and palm that serve as the basis for the robot's trajectory. Meanwhile, I annotate object-level keypoints using CoTracker, giving the model a consistent spatial representation of both the hand and the target object across frames. A ResKin tactile sensor mounted on the gripper records contact forces during separate grasping trials, providing the force labels used for training.
+I collect demonstrations by having a human perform the task in front of two calibrated cameras. MediaPipe tracks the hand in real time, extracting semantic keypoints on the fingers and palm that serve as the basis for the robot's trajectory. Meanwhile, I annotate object-level keypoints using CoTracker, giving the model a consistent spatial representation of both the hand and the target object across frames. A ResKin tactile sensor mounted on the gripper records contact forces during separate grasping trials, providing the force labels used for training.
 </div>
 
 ## Translating Points to Franka End Points
@@ -35,7 +34,7 @@ I collect demonstrations by having a human perform the task barehanded in front 
   <source src="{{ site.url }}/img/portfolio/handtorobot.mp4" type="video/mp4">
 </video>
 
-The core challenge is mapping a human hand demonstration onto a robot gripper that has far fewer degrees of freedom. The tracked 2D keypoints are triangulated across both camera views to recover 3D positions, and a rigid transformation aligns the human hand's keypoint cloud to the robot's end-effector frame. This produces a full 6-DoF pose trajectory and a gripper open/close signal derived from the distance between the thumb and index finger. The result is a set of robot-executable actions that faithfully reproduce the spatial intent of the original human demonstration.
+The core challenge is mapping a human hand demonstration onto a robot gripper that has far fewer degrees of freedom. The tracked 2D keypoints are triangulated across both camera views to recover 3D positions, and a rigid transformation aligns the human hand's keypoint cloud to the robot's end-effector frame. This produces a full 6-DoF pose trajectory and a gripper open/close signal derived from the distance between the thumb and index finger. The result is a set of robot-executable actions that reproduce the spatial intent of the original human demonstration.
 </div>
 
 ## Robot Execution
@@ -57,7 +56,7 @@ The core challenge is mapping a human hand demonstration onto a robot gripper th
 
 Without force feedback, the robot has no way to modulate its grip strength, it simply closes the gripper until the binary close command is fully executed. For fragile objects like eggs, this can lead to it breaking. Here the robot successfully reaches and grasps the egg using the learned trajectory, but the uncontrolled gripper force crushes it. This failure motivates the need for closed-loop force control during the grasp phase.
 
-With the ResKin sensor in the loop, the robot can feel how much force it is applying and stop closing once a target threshold is reached. The force controller reads the live tactile signal and adjusts the gripper incrementally, holding the egg securely without exceeding the pressure that would crack it. The same learned trajectory is used — only the grasp execution changes. This demonstrates that combining learned spatial policies with real-time tactile feedback enables safe manipulation of objects that would otherwise be destroyed.
+With the ResKin sensor in the loop, the robot can feel how much force it is applying and stop closing once a target threshold is reached. The force controller reads the live tactile signal and adjusts the gripper incrementally, holding the egg securely without exceeding the pressure that would crack it. This demonstrates that combining learned spatial policies with real-time tactile feedback enables safe manipulation of objects that would otherwise be damaged.
 
 <div style="display: flex; gap: 4px; margin: 20px auto; flex-wrap: nowrap; align-items: flex-start; max-width: 560px;">
   <div style="flex: 1;">
@@ -72,7 +71,7 @@ With the ResKin sensor in the loop, the robot can feel how much force it is appl
   </div>
 </div>
 
-Above are two evaluation runs showing the full pipeline end-to-end: the robot approaches the egg, descends to the grasp position, and closes with force-controlled grip. Each camera view is shown separately, with the live force reading overlaid in blue. The consistency across runs demonstrates that the learned policy generalizes reliably from the human demonstrations.
+Above are two evaluation runs showing the full pipeline end-to-end, the robot approaches the egg, descends to the grasp position, and closes with force-controlled grip. Each camera view is shown separately, with the live force reading overlaid in blue. The consistency across runs demonstrates that the learned policy generalizes reliably from the human demonstrations.
 
 ## System Architecture
 
