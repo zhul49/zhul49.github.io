@@ -1,12 +1,13 @@
 ---
 layout: post
 modal-id: 4
-date: 2025-12-19
+date: 2026-1-19
 featured: true
 title: Hand2Rob
+subtitle: Learning from direct human demonstrations
 img: Cup_thumbnail.mp4
 alt: Hand2Rob
-project-date: Dec 2025
+project-date: Jan 2026
 description: "Teaching robots to grasp delicate objects by learning from human hand demonstrations with tactile feedback."
 tags:
   - Python
@@ -15,8 +16,14 @@ tags:
   - Computer Vision
   - PyTorch
   - LibFranka
-github: https://github.com/zhul49/-Hand2Rob_Lamb
+github: https://github.com/zhul49/Hand2Rob
 ---
+## Overview
+
+Hand2Rob teaches a Franka robot to grasp delicate objects by watching human hand demonstrations captured with a stereo camera pair. MediaPipe and CoTracker extract hand and object keypoints that get triangulated into 3D trajectories the robot can follow directly. The catch is that spatial imitation alone isn't enough for fragile things, so I integrated a ResKin tactile sensor into custom gripper fingertips to give the robot a sense of force.
+
+This project builds on Point Policy and Feel The Force by Siddhant Haldar and Lerrel Pinto. Big thanks to them for the original work. I adapted and extended both systems with my own changes to get them running on the Franka Panda, including modifications to the trajectory execution, force control integration, data collection, and the custom gripper hardware.
+
 ## Data Collection and Annotation
 
 <div class="clearfix">
@@ -24,7 +31,7 @@ github: https://github.com/zhul49/-Hand2Rob_Lamb
   <source src="{{ site.url }}/img/portfolio/Mediapipe_Pingpong.mp4" type="video/mp4">
 </video>
 
-I collect demonstrations by having a human perform the task in front of two calibrated cameras. MediaPipe tracks the hand in real time, extracting semantic keypoints on the fingers and palm that serve as the basis for the robot's trajectory. Meanwhile, I annotate object-level keypoints using CoTracker, giving the model a consistent spatial representation of both the hand and the target object across frames. A ResKin tactile sensor mounted on the gripper records contact forces during separate grasping trials, providing the force labels used for training.
+I collect demonstrations by having a human perform the task in front of two calibrated cameras. MediaPipe tracks the hand in real time, extracting semantic keypoints on the fingers and palm that serve as the basis for the robot's trajectory. I also annotate object keypoints using CoTracker, giving the model a consistent spatial representation of both the hand and the target object across frames. A ResKin tactile sensor mounted on my thumb records contact forces during grasping trials, providing the force labels used for training.
 </div>
 
 ## Translating Points to Franka End Points
@@ -34,7 +41,7 @@ I collect demonstrations by having a human perform the task in front of two cali
   <source src="{{ site.url }}/img/portfolio/handtorobot.mp4" type="video/mp4">
 </video>
 
-The core challenge is mapping a human hand demonstration onto a robot gripper that has far fewer degrees of freedom. The tracked 2D keypoints are triangulated across both camera views to recover 3D positions, and a rigid transformation aligns the human hand's keypoint cloud to the robot's end-effector frame. This produces a full 6-DoF pose trajectory and a gripper open/close signal derived from the distance between the thumb and index finger. The result is a set of robot-executable actions that reproduce the spatial intent of the original human demonstration.
+The core challenge is mapping a human hand demonstration onto a robot gripper that has far fewer degrees of freedom. The tracked 2D keypoints are triangulated across both camera views to recover 3D positions, and a transformation aligns the human hand's keypoint cloud to the robot's end-effector frame. This produces a full 6-DoF pose trajectory and a gripper open/close signal derived from the distance between the thumb and index finger. The result is a set of robot-executable actions that reproduce the intent of the original human demonstration.
 </div>
 
 ## Robot Execution
@@ -76,7 +83,7 @@ Above are two evaluation runs showing the full pipeline end-to-end, the robot ap
 ## System Architecture
 
 <div style="text-align: center; margin: 20px 0;">
-  <img src="{{ site.url }}/img/portfolio/Screenshot from 2026-03-12 13-59-44.png" class="img-responsive" style="margin: 0 auto; max-width: 600px; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.10);" alt="Hand2Rob system architecture">
+  <img src="{{ site.url }}/img/portfolio/hand2rob_architecture(1).png" class="img-responsive" style="margin: 0 auto; max-width: 600px; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.10);" alt="Hand2Rob system architecture">
   <p style="margin-top: 10px; font-size: 0.9em; color: #666;"><strong>Figure 1.</strong> Overview of the Hand2Rob pipeline. Stereo camera footage and MediaPipe hand tracking are processed through CoTracker and stereo triangulation to build the dataset. A training policy learns both the end-effector trajectory and force grasping, which are deployed on the Franka robot with ResKin tactile feedback for manipulating fragile objects.</p>
 </div>
 

@@ -1,24 +1,13 @@
 <!-- Portfolio Grid Section -->
 <section id="portfolio">
   <div class="container portfolio-flex-grid">
-    <div class="row">
-      <div class="col-lg-12 text-center">
-        <h2>Portfolio</h2>
-        <hr class="star-primary">
-      </div>
-    </div>
 
     <!-- Featured Projects -->
-    <div class="portfolio-section-label">Featured</div>
-    <div class="portfolio-flex-row portfolio-featured-row">
+    <div class="portfolio-section-label" style="font-size: 1.3em; font-weight: 700; color: #2c3e50; margin-bottom: 20px;">Featured</div>
+    <div class="portfolio-flex-row portfolio-featured-row" style="max-width: 1000px;">
       {% for post in site.posts %}{% if post.featured %}
       <div class="portfolio-flex-item portfolio-item">
-        <a href="{{ post.url }}" class="portfolio-link" target="_blank" rel="noopener">
-          <div class="caption">
-            <div class="caption-content">
-              <i class="fa fa-search-plus fa-3x"></i>
-            </div>
-          </div>
+        <a href="{{ post.url }}" class="portfolio-link" target="_blank" rel="noopener" style="display: flex; flex-direction: column; text-decoration: none; color: inherit; height: 100%;">
           {% if post.img contains '.mp4' %}
             <video class="img-responsive" autoplay loop muted playsinline>
               <source src="img/portfolio/{{ post.img }}" type="video/mp4">
@@ -26,37 +15,37 @@
           {% else %}
             <img src="img/portfolio/{{ post.img }}" class="img-responsive" alt="{{ post.alt }}">
           {% endif %}
+          <div class="portfolio-card-text" style="flex: 1; display: flex; flex-direction: column;">
+            <div style="text-align: center; margin-bottom: 12px;">
+              <h3 style="margin-bottom: 4px; color: inherit;">{{ post.title | default: post.alt }}</h3>
+              {% if post.subtitle %}
+                <p style="font-size: 0.95em; color: #555; margin: 0; font-weight: 800;">{{ post.subtitle }}</p>
+              {% endif %}
+            </div>
+            <p>{{ post.description }}</p>
+            {% if post.tags or post.tech %}<div class="tag-divider"></div>{% endif %}
+            {% if post.tags %}
+              <div class="project-tags">
+                {% for tag in post.tags %}<span class="tag-chip">{{ tag }}</span>{% endfor %}
+              </div>
+            {% elsif post.tech %}
+              <div class="project-tags">
+                {% assign tech_list = post.tech | split: "·" %}
+                {% for tag in tech_list %}<span class="tag-chip">{{ tag | strip }}</span>{% endfor %}
+              </div>
+            {% endif %}
+          </div>
         </a>
-        <div class="portfolio-card-text">
-          <h3><a href="{{ post.url }}" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">{{ post.title | default: post.alt }}</a></h3>
-          <p>{{ post.description }}</p>
-          {% if post.tags or post.tech %}<div class="tag-divider"></div>{% endif %}
-          {% if post.tags %}
-            <div class="project-tags">
-              {% for tag in post.tags %}<span class="tag-chip">{{ tag }}</span>{% endfor %}
-            </div>
-          {% elsif post.tech %}
-            <div class="project-tags">
-              {% assign tech_list = post.tech | split: "·" %}
-              {% for tag in tech_list %}<span class="tag-chip">{{ tag | strip }}</span>{% endfor %}
-            </div>
-          {% endif %}
-        </div>
       </div>
       {% endif %}{% endfor %}
     </div>
 
     <!-- Other Projects -->
-    <div class="portfolio-section-label" style="margin-top: 48px;">Other Projects</div>
+    <div class="portfolio-section-label" style="font-size: 1.3em; font-weight: 700; color: #2c3e50; margin-top: 48px; margin-bottom: 20px;">Other Projects</div>
     <div class="portfolio-flex-row">
       {% for post in site.posts %}{% unless post.featured %}
       <div class="portfolio-flex-item portfolio-item">
-        <a href="{{ post.url }}" class="portfolio-link" target="_blank" rel="noopener">
-          <div class="caption">
-            <div class="caption-content">
-              <i class="fa fa-search-plus fa-3x"></i>
-            </div>
-          </div>
+        <a href="{{ post.url }}" class="portfolio-link" target="_blank" rel="noopener" style="display: flex; flex-direction: column; text-decoration: none; color: inherit; height: 100%;">
           {% if post.img contains '.mp4' %}
             <video class="img-responsive" autoplay loop muted playsinline>
               <source src="img/portfolio/{{ post.img }}" type="video/mp4">
@@ -64,22 +53,27 @@
           {% else %}
             <img src="img/portfolio/{{ post.img }}" class="img-responsive" alt="{{ post.alt }}">
           {% endif %}
+          <div class="portfolio-card-text" style="flex: 1; display: flex; flex-direction: column;">
+            <div style="text-align: center; margin-bottom: 12px;">
+              <h3 style="margin-bottom: 4px; color: inherit;">{{ post.title | default: post.alt }}</h3>
+              {% if post.subtitle %}
+                <p style="font-size: 0.95em; color: #555; margin: 0; font-weight: 800;">{{ post.subtitle }}</p>
+              {% endif %}
+            </div>
+            <p>{{ post.description }}</p>
+            {% if post.tags or post.tech %}<div class="tag-divider"></div>{% endif %}
+            {% if post.tags %}
+              <div class="project-tags">
+                {% for tag in post.tags %}<span class="tag-chip">{{ tag }}</span>{% endfor %}
+              </div>
+            {% elsif post.tech %}
+              <div class="project-tags">
+                {% assign tech_list = post.tech | split: "·" %}
+                {% for tag in tech_list %}<span class="tag-chip">{{ tag | strip }}</span>{% endfor %}
+              </div>
+            {% endif %}
+          </div>
         </a>
-        <div class="portfolio-card-text">
-          <h3><a href="{{ post.url }}" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">{{ post.title | default: post.alt }}</a></h3>
-          <p>{{ post.description }}</p>
-          {% if post.tags or post.tech %}<div class="tag-divider"></div>{% endif %}
-          {% if post.tags %}
-            <div class="project-tags">
-              {% for tag in post.tags %}<span class="tag-chip">{{ tag }}</span>{% endfor %}
-            </div>
-          {% elsif post.tech %}
-            <div class="project-tags">
-              {% assign tech_list = post.tech | split: "·" %}
-              {% for tag in tech_list %}<span class="tag-chip">{{ tag | strip }}</span>{% endfor %}
-            </div>
-          {% endif %}
-        </div>
       </div>
       {% endunless %}{% endfor %}
     </div>

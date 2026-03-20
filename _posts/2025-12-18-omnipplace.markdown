@@ -3,7 +3,8 @@ layout: post
 modal-id: 1
 date: 2025-12-18
 featured: true
-title: Autonomous Pick-and-Place
+title: "Autonomous<br>Pick-and-Place"
+subtitle: Camera-guided grasping with a Franka robot arm
 img: omniplace.gif
 alt: OmniPlace
 project-date: Dec 2025

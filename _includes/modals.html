@@ -14,6 +14,9 @@
         <div class="col-lg-8 col-lg-offset-2">
           <div class="modal-body">
             <h2>{{ post.title }}</h2>
+            {% if post.subtitle %}
+              <p class="subtitle" style="font-size: 1.3em; font-weight: 600; color: #666; margin-top: 10px;">{{ post.subtitle }}</p>
+            {% endif %}
             <hr class="star-primary">
             <img src="img/portfolio/{{ post.img }}" class="img-responsive img-centered" alt="{{ post.alt }}">
             {% if post.description %}

@@ -54,6 +54,9 @@
 
           <div class="text-center">
             <h2>{{ page.title }}</h2>
+            {% if page.subtitle %}
+              <p class="subtitle" style="font-size: 1.3em; font-weight: 600; color: #666; margin-top: 10px;">{{ page.subtitle }}</p>
+            {% endif %}
             <hr class="star-primary">
           </div>
 
