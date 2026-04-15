@@ -60,12 +60,13 @@
             <hr class="star-primary">
           </div>
 
-          {% if page.img contains '.mp4' %}
-            <video class="img-responsive img-centered" autoplay loop muted playsinline>
-              <source src="{{ site.url }}/img/portfolio/{{ page.img }}" type="video/mp4">
+          {% assign hero_file = page.hero | default: page.img %}
+          {% if hero_file contains '.mp4' %}
+            <video class="img-responsive img-centered" controls playsinline style="max-width: 100%;">
+              <source src="{{ site.url }}/img/portfolio/{{ hero_file }}" type="video/mp4">
             </video>
           {% else %}
-            <img src="{{ site.url }}/img/portfolio/{{ page.img }}" class="img-responsive img-centered" alt="{{ page.alt }}">
+            <img src="{{ site.url }}/img/portfolio/{{ hero_file }}" class="img-responsive img-centered" alt="{{ page.alt }}">
           {% endif %}
 
           {% if page.description %}

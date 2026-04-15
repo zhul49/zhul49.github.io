@@ -6,6 +6,7 @@ featured: true
 title: Hand2Rob
 subtitle: Learning from direct human demonstrations
 img: Cup_thumbnail.mp4
+hero: LinkedinVideo3.mp4
 alt: Hand2Rob
 project-date: Jan 2026
 description: "Teaching robots to grasp delicate objects by learning from human hand demonstrations with tactile feedback."

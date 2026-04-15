@@ -4,7 +4,7 @@
 
     <!-- Featured Projects -->
     <div class="portfolio-section-label" style="font-size: 1.3em; font-weight: 700; color: #2c3e50; margin-bottom: 20px;">Featured</div>
-    <div class="portfolio-flex-row portfolio-featured-row" style="max-width: 1000px;">
+    <div class="portfolio-flex-row portfolio-featured-row">
       {% for post in site.posts %}{% if post.featured %}
       <div class="portfolio-flex-item portfolio-item">
         <a href="{{ post.url }}" class="portfolio-link" target="_blank" rel="noopener" style="display: flex; flex-direction: column; text-decoration: none; color: inherit; height: 100%;">

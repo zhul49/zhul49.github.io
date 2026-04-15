@@ -99,6 +99,8 @@ header .intro-text .skills {
 /* Reduce extra whitespace above the "PORTFOLIO" heading */
 #portfolio .container {
   padding-top: 0 !important;
+  max-width: 1760px !important;
+  width: 95% !important;
 }
 
 /* Make card thumbnails fill the full card width */
@@ -106,11 +108,17 @@ header .intro-text .skills {
   max-width: 100% !important;
 }
 
-/* Featured cards: always 2 columns, larger */
+/* Featured cards: 2 columns on medium, 3 on wide */
 @media (min-width: 640px) {
   .portfolio-featured-row .portfolio-flex-item {
     flex: 1 1 calc(50% - 28px) !important;
     max-width: calc(50% - 28px) !important;
+  }
+}
+@media (min-width: 960px) {
+  .portfolio-featured-row .portfolio-flex-item {
+    flex: 1 1 calc(33.333% - 28px) !important;
+    max-width: calc(33.333% - 28px) !important;
   }
 }
 

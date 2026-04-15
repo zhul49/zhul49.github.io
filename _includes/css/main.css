@@ -464,9 +464,10 @@ section.success {
   .portfolio-flex-grid .portfolio-flex-row {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;  /* or flex-start */
-    column-gap: 56px;         /* horizontal spacing between cards */
-    row-gap: 36px;            /* vertical spacing between rows */
+    justify-content: center;
+    align-items: flex-start;
+    column-gap: 56px;
+    row-gap: 36px;
   }
 
   .portfolio-flex-grid .portfolio-flex-row .portfolio-flex-item {
