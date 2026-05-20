@@ -23,7 +23,7 @@ github: https://github.com/zhul49/Hand2Rob
 
 Hand2Rob teaches a Franka robot to grasp delicate objects by watching human hand demonstrations captured with a stereo camera pair. MediaPipe and CoTracker extract hand and object keypoints that get triangulated into 3D trajectories the robot can follow directly. The catch is that spatial imitation alone isn't enough for fragile things, so I integrated a ResKin tactile sensor into custom gripper fingertips to give the robot a sense of force.
 
-This project builds on Point Policy and Feel The Force by Siddhant Haldar and Lerrel Pinto. Big thanks to them for the original work. I adapted and extended both systems with my own changes to get them running on the Franka Panda, including modifications to the trajectory execution, force control integration, data collection, and the custom gripper hardware.
+This project builds on [Point Policy](https://github.com/siddhanthaldar/Point-Policy) and [Feel The Force](https://github.com/feel-the-force-ftf/feel-the-force) by Siddhant Haldar and Lerrel Pinto. Big thanks to them for the original work. I adapted and extended both systems with my own changes to get them running on the Franka Panda, including modifications to the trajectory execution, force control integration, data collection, and the custom gripper hardware.
 
 ## Data Collection and Annotation
 
@@ -102,3 +102,8 @@ Above are two evaluation runs showing the full pipeline end-to-end, the robot ap
 </div>
 
 Special thanks to Miguel Pegues for helping me design custom gripper fingertips to house the ResKin magnetometer-based tactile sensor. The left model shows the standard Franka gripper fingers, while the right model integrates a recessed pocket that secures the ResKin sensing pad flush against the contact surface.
+
+## Citations
+
+- [Point Policy](https://github.com/siddhanthaldar/Point-Policy) — Siddhant Haldar, Lerrel Pinto
+- [Feel The Force](https://github.com/feel-the-force-ftf/feel-the-force) — Siddhant Haldar, Lerrel Pinto
