@@ -1,0 +1,236 @@
+---
+layout: post
+modal-id: 8
+date: 2026-09-28
+title: RPG Game Master
+subtitle: A LoRA fine-tune of Llama 3.1 8B that runs a tabletop RPG, with retrieval memory
+img: rpggen_thumb.png
+hero: rpggen_ui.png
+alt: Fine-tuned Llama 3.1 RPG game master GUI
+project-date: Sep 2026
+description: "A LoRA fine-tune of Llama-3.1-8B that acts as the game master of a tabletop fantasy RPG. It narrates in second person, plays NPCs in character, applies consequences without deciding the player's choices, and uses a retrieval-augmented memory to keep the world consistent across a long session."
+github: https://github.com/zhul49/RPG_Gen
+tags:
+  - LoRA Fine-Tuning
+  - Llama 3.1 8B
+  - QLoRA
+  - RAG
+  - LLM-as-Judge
+  - ChromaDB
+---
+## Overview
+
+RPG Game Master is a LoRA fine-tune of Llama-3.1-8B that runs a tabletop fantasy RPG. Each turn it narrates the scene in second person, voices the NPCs in character, and reacts to whatever the player tries, then hands the turn back at a point where the player actually has something to do. The important design rule is that it applies consequences but never resolves the player's intent: it will not decide whether your attack lands, speak for you, or make your choices.
+
+The base Llama model can roleplay, but it tends to let every NPC react at once, plays along with anything, and ends every turn with a chipper "What will you do?". The fine-tune was built to fix exactly those habits, and a retrieval memory runs alongside it so the world stays consistent even in a long session. The screenshot above is the running app: the fine-tuned GM narrating a turn on the merchant ship, with the world bible (RAG memory) filling up on the right.
+
+## What the fine-tune changed
+
+The clearest way to see the difference is to give the same scene and the same player action to the fine-tuned GM and to stock Llama-3.1-8B-Instruct. The scene is a merchant ship, the Marigold, with Captain John, first mate Mara, deckhand Tom, and the cook Bess.
+
+<div style="border-left: 4px solid #18bc9c; background: #f7fbfa; padding: 14px 18px; margin: 18px 0; border-radius: 0 8px 8px 0;">
+<p style="margin: 0 0 10px;"><strong>Player:</strong> <em>I draw my cutlass and lunge at Captain John, shouting "The Marigold is mine now!"</em></p>
+<p style="margin: 0 0 6px; font-weight: 700; color: #12876f;">Fine-tuned GM</p>
+<p style="margin: 0;">Captain John doesn't flinch. He keeps steering with one hand and raps the back of your head with the flat of his palm, hard enough that stars flash, not enough to break bone. "Put the blade away before I put you over the rail," he says, calm, glancing once at Mara, who's already moving toward the rigging. "We're three days from shore. Three days, and no place on this boat where you can hide." The deckhands go quiet; Tom looks like he might vomit.</p>
+<details style="margin-top: 10px;">
+<summary style="cursor: pointer; color: #555; font-size: 0.92em;">Show base Llama-3.1-8B response</summary>
+<p style="margin: 8px 0 0; color: #555;">As you draw your cutlass and shout, the entire crew stops what they're doing to look at you. Captain John's bushy eyebrows shoot up in surprise. "By the gods, lad! What's gotten into ye?" he exclaims, taking a step back, his hand hovering near his own sword but not drawing it. Mara rushes over, her eyes wide with concern. "Easy there, boyo!" she asks. Tom drops his brush and gasps. "Oh no! Has he gone mad from the sun?" Bess pokes her head out of the galley. "What's all this commotion?" she calls out. The captain holds up a calming hand. "Now, now, there's no need for violence among friends! Why don't ye put that blade away and we'll talk this over like civilized folk, eh?" What will you do?</p>
+</details>
+</div>
+
+Every NPC on the ship reacts in the base version, the threat evaporates into friendly chatter, and it closes with the tell-tale "What will you do?". The fine-tune keeps John in command, moves only the people who would actually move, and leaves a real threat hanging.
+
+<div style="border-left: 4px solid #18bc9c; background: #f7fbfa; padding: 14px 18px; margin: 18px 0; border-radius: 0 8px 8px 0;">
+<p style="margin: 0 0 10px;"><strong>Player:</strong> <em>I leap off the deck, fly up into the storm clouds, and call down a bolt of lightning to split the mast.</em></p>
+<p style="margin: 0 0 6px; font-weight: 700; color: #12876f;">Fine-tuned GM</p>
+<p style="margin: 0;">You vault off the rail and your feet meet nothing but air; there's no flying here, and no lightning answers a man who asks for it. Captain John hauls you back by the collar before you can drop far. "Watch the rail," he growls. "Mara keeps her eyes open." Mara doesn't look away from the grey line where horizon meets cloud. "If we lose that mast in a squall, I'd rather know why than watch him flapping about the sky." Tom gapes after you like you're mad, which maybe you are.</p>
+<details style="margin-top: 10px;">
+<summary style="cursor: pointer; color: #555; font-size: 0.92em;">Show base Llama-3.1-8B response</summary>
+<p style="margin: 8px 0 0; color: #555;">You leap dramatically off the deck, reaching your arms toward the swirling storm clouds above, willing the lightning to obey your command! For a moment, the wind howls and the clouds churn ominously... but alas, no bolt of lightning answers your call. You land back on the deck with a thud, slightly winded. Mara gasps. Captain John strokes his chin thoughtfully. "Well now, that was quite the spectacle!" Tom stares, jaw hanging open. "Whoa! That was AMAZING! Can you teach me how to do that?" What will you do?</p>
+</details>
+</div>
+
+Here the fine-tune simply denies the impossible action and grounds the player back on the deck, while the base model stages it as a dramatic spectacle the crew admires. Refusing overpowered actions without breaking immersion was one of the behaviors I trained for directly.
+
+<div style="border-left: 4px solid #18bc9c; background: #f7fbfa; padding: 14px 18px; margin: 18px 0; border-radius: 0 8px 8px 0;">
+<p style="margin: 0 0 10px;"><strong>Player:</strong> <em>I try to convince Mara to take over the ship, whispering, "The captain's leading us to our deaths. Join me."</em></p>
+<p style="margin: 0 0 6px; font-weight: 700; color: #12876f;">Fine-tuned GM</p>
+<p style="margin: 0;">Mara glances at your mouth, then out past the rail to where Captain John stands by the wheel. She doesn't answer right away; her hand drifts once to her sword-hilt before letting go. "He hasn't steered wrong yet," she says finally. "Not like some I could name who've lost ships off these same shoals." Her gaze comes back to you. "And even if he was blind, the crew'd know better than to follow a stranger's word against theirs. You want my blade? Earn one of mine first."</p>
+</div>
+
+The persuasion attempt gets a reasoned, in-character refusal that reflects loyalty and reputation, rather than a nervous "we'll talk about this later." The GM plays Mara's judgment instead of caving to the player.
+
+## How a turn is structured
+
+Every turn is a chat exchange with a fixed shape. A system message states the GM's rules. A user message carries five labeled slots. The assistant message is the GM's narration, which is the target during training and the output at inference.
+
+<div style="max-width: 820px; margin: 26px auto;">
+<svg viewBox="0 0 820 430" role="img" aria-label="Prompt anatomy: a system rulebook, a five-slot user message, and the GM narration as the assistant reply" style="width:100%; height:auto; font-family: Lato, Helvetica, Arial, sans-serif;">
+  <defs>
+    <marker id="pa1" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#2c3e50"/></marker>
+  </defs>
+  <!-- system -->
+  <rect x="60" y="24" width="700" height="66" rx="8" fill="#2c3e50"/>
+  <text x="80" y="47" font-size="13" fill="#fff" font-weight="700">System: GM rulebook</text>
+  <text x="80" y="68" font-size="11.5" fill="#cfe9e2">second person, present tense · voice NPCs with action around dialogue · apply</text>
+  <text x="80" y="83" font-size="11.5" fill="#cfe9e2">consequences · never resolve the player's intent · stop where the player can act</text>
+  <line x1="410" y1="90" x2="410" y2="118" stroke="#2c3e50" stroke-width="2" marker-end="url(#pa1)"/>
+  <!-- user -->
+  <rect x="60" y="120" width="700" height="180" rx="10" fill="#f7fbfa" stroke="#cfd8dc" stroke-width="1.5"/>
+  <text x="80" y="143" font-size="13" fill="#2c3e50" font-weight="700">User message: five slots</text>
+  <rect x="72" y="158" width="128" height="126" rx="7" fill="#eafaf5" stroke="#18bc9c" stroke-width="1.6"/>
+  <text x="136" y="216" text-anchor="middle" font-size="12" fill="#2c3e50" font-weight="700">Setting</text>
+  <rect x="208" y="158" width="128" height="126" rx="7" fill="#eafaf5" stroke="#18bc9c" stroke-width="1.6"/>
+  <text x="272" y="210" text-anchor="middle" font-size="12" fill="#2c3e50" font-weight="700">Characters</text>
+  <text x="272" y="226" text-anchor="middle" font-size="12" fill="#2c3e50" font-weight="700">present</text>
+  <rect x="344" y="158" width="128" height="126" rx="7" fill="#d5f3ea" stroke="#18bc9c" stroke-width="2.2"/>
+  <text x="408" y="210" text-anchor="middle" font-size="12" fill="#2c3e50" font-weight="700">World state</text>
+  <text x="408" y="240" text-anchor="middle" font-size="10" fill="#12876f">filled by</text>
+  <text x="408" y="253" text-anchor="middle" font-size="10" fill="#12876f">RAG memory</text>
+  <rect x="480" y="158" width="128" height="126" rx="7" fill="#eafaf5" stroke="#18bc9c" stroke-width="1.6"/>
+  <text x="544" y="210" text-anchor="middle" font-size="12" fill="#2c3e50" font-weight="700">Recent</text>
+  <text x="544" y="226" text-anchor="middle" font-size="12" fill="#2c3e50" font-weight="700">history</text>
+  <rect x="616" y="158" width="128" height="126" rx="7" fill="#eafaf5" stroke="#18bc9c" stroke-width="1.6"/>
+  <text x="680" y="210" text-anchor="middle" font-size="12" fill="#2c3e50" font-weight="700">Player</text>
+  <text x="680" y="226" text-anchor="middle" font-size="12" fill="#2c3e50" font-weight="700">action</text>
+  <line x1="410" y1="300" x2="410" y2="330" stroke="#2c3e50" stroke-width="2" marker-end="url(#pa1)"/>
+  <!-- assistant -->
+  <rect x="60" y="332" width="700" height="66" rx="8" fill="#eafaf5" stroke="#18bc9c" stroke-width="2"/>
+  <text x="80" y="358" font-size="13" fill="#2c3e50" font-weight="700">Assistant: GM narration</text>
+  <text x="80" y="381" font-size="11.5" fill="#555">the target the model is trained to produce, and what it generates at inference</text>
+</svg>
+<p style="text-align: center; margin-top: 6px; font-size: 0.9em; color: #666;">The same five-slot format is used for both training and inference, so the retrieval memory can drop facts straight into the World state slot the model already knows how to read.</p>
+</div>
+
+## Fine-tuning
+
+Fine-tuning uses QLoRA on top of Llama-3.1-8B-Instruct. The base model is loaded in 4-bit (NF4 with double quantization and a bfloat16 compute type) so it fits on a single GPU, and its weights stay frozen. Only small LoRA adapters are trained, with rank 16, alpha 32, and a light dropout, applied to all of the attention and MLP projection layers. That keeps the number of trainable parameters tiny compared to the full 8B model.
+
+Training runs for 3 epochs with an effective batch size of 16 (batch of 4 with 4 gradient-accumulation steps), a 2e-4 learning rate on a cosine schedule with a short warmup, a 4096-token context, bfloat16, and gradient checkpointing. It is built with Hugging Face TRL and PEFT. The finished adapter is published to the Hugging Face hub and pulled down on first run.
+
+## Building the dataset
+
+The quality of a fine-tune like this lives or dies on the data, so most of the work went into building a clean training set rather than tuning hyperparameters. Examples come from four sources: transcripts from real play like Critical Role (the CRD3 dataset) and FIREBALL, fantasy character dialogue from the LIGHT dataset, and a batch of hand-written examples. There is also a dedicated bucket of proactive turns that teach the model to advance the scene on its own when the player does nothing.
+
+Raw transcripts are noisy, full of dice talk, table chatter, and donation shout-outs, none of which belong in GM narration. To filter them, every candidate example is scored by an LLM judge against a strict rubric that rewards concrete sensory detail, second-person present-tense narration, and turns that stop where the player can react, while penalizing mechanics talk, out-of-character chatter, and incoherence. The judge scores each example from 1 to 5, and only 4s and 5s survive into the final mix. Judging runs many calls concurrently and caches every score to disk so the dataset can be rebuilt without paying to re-judge. The surviving examples are shuffled together, split into training and validation, and written out in the five-slot chat format.
+
+<div style="max-width: 900px; margin: 26px auto;">
+<svg viewBox="0 0 900 340" role="img" aria-label="Data and training pipeline: sources, an LLM judge, a mix and split, then QLoRA fine-tuning into an adapter" style="width:100%; height:auto; font-family: Lato, Helvetica, Arial, sans-serif;">
+  <defs>
+    <marker id="dp1" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#2c3e50"/></marker>
+  </defs>
+  <!-- sources -->
+  <rect x="16" y="36" width="150" height="38" rx="7" fill="#eafaf5" stroke="#18bc9c" stroke-width="1.6"/>
+  <text x="91" y="60" text-anchor="middle" font-size="11.5" fill="#2c3e50">CRD3 (Critical Role)</text>
+  <rect x="16" y="86" width="150" height="38" rx="7" fill="#eafaf5" stroke="#18bc9c" stroke-width="1.6"/>
+  <text x="91" y="110" text-anchor="middle" font-size="11.5" fill="#2c3e50">FIREBALL</text>
+  <rect x="16" y="136" width="150" height="38" rx="7" fill="#eafaf5" stroke="#18bc9c" stroke-width="1.6"/>
+  <text x="91" y="160" text-anchor="middle" font-size="11.5" fill="#2c3e50">LIGHT dialogue</text>
+  <rect x="16" y="186" width="150" height="38" rx="7" fill="#eafaf5" stroke="#18bc9c" stroke-width="1.6"/>
+  <text x="91" y="210" text-anchor="middle" font-size="11.5" fill="#2c3e50">Hand-written</text>
+  <!-- judge -->
+  <rect x="230" y="80" width="180" height="120" rx="8" fill="#fdeede" stroke="#e08a2b" stroke-width="2"/>
+  <text x="320" y="108" text-anchor="middle" font-size="12.5" fill="#8a5212" font-weight="700">LLM judge</text>
+  <text x="320" y="128" text-anchor="middle" font-size="11" fill="#8a5212">gpt-4o-mini</text>
+  <text x="320" y="148" text-anchor="middle" font-size="11" fill="#8a5212">scores 1 to 5</text>
+  <text x="320" y="168" text-anchor="middle" font-size="11" fill="#8a5212">keep only 4 and 5</text>
+  <text x="320" y="188" text-anchor="middle" font-size="11" fill="#8a5212">concurrent + cached</text>
+  <!-- mix -->
+  <rect x="470" y="100" width="160" height="80" rx="8" fill="#fff" stroke="#2c3e50" stroke-width="2"/>
+  <text x="550" y="132" text-anchor="middle" font-size="12" fill="#2c3e50" font-weight="700">Mix + shuffle</text>
+  <text x="550" y="152" text-anchor="middle" font-size="11" fill="#555">95 / 5 train-val split</text>
+  <!-- training -->
+  <rect x="690" y="60" width="196" height="130" rx="8" fill="#2c3e50"/>
+  <text x="788" y="86" text-anchor="middle" font-size="12.5" fill="#fff" font-weight="700">QLoRA fine-tune</text>
+  <rect x="706" y="98" width="164" height="30" rx="5" fill="#4a6076"/>
+  <text x="788" y="118" text-anchor="middle" font-size="10.5" fill="#e8eef2">Llama-3.1-8B frozen (4-bit)</text>
+  <rect x="706" y="134" width="164" height="30" rx="5" fill="#18bc9c"/>
+  <text x="788" y="154" text-anchor="middle" font-size="10.5" fill="#fff" font-weight="700">+ LoRA adapters (r=16)</text>
+  <text x="788" y="180" text-anchor="middle" font-size="10" fill="#cfe9e2">only the adapters train</text>
+  <!-- adapter out -->
+  <rect x="690" y="250" width="196" height="46" rx="8" fill="#d5f3ea" stroke="#18bc9c" stroke-width="2"/>
+  <text x="788" y="271" text-anchor="middle" font-size="11.5" fill="#2c3e50" font-weight="700">Adapter: gm-rpg-v11</text>
+  <text x="788" y="287" text-anchor="middle" font-size="10.5" fill="#555">published to Hugging Face</text>
+  <!-- arrows -->
+  <line x1="166" y1="55" x2="228" y2="110" stroke="#2c3e50" stroke-width="1.6" marker-end="url(#dp1)"/>
+  <line x1="166" y1="105" x2="228" y2="125" stroke="#2c3e50" stroke-width="1.6" marker-end="url(#dp1)"/>
+  <line x1="166" y1="155" x2="228" y2="150" stroke="#2c3e50" stroke-width="1.6" marker-end="url(#dp1)"/>
+  <line x1="166" y1="205" x2="228" y2="170" stroke="#2c3e50" stroke-width="1.6" marker-end="url(#dp1)"/>
+  <line x1="410" y1="140" x2="468" y2="140" stroke="#2c3e50" stroke-width="2" marker-end="url(#dp1)"/>
+  <line x1="630" y1="135" x2="688" y2="125" stroke="#2c3e50" stroke-width="2" marker-end="url(#dp1)"/>
+  <line x1="788" y1="190" x2="788" y2="248" stroke="#2c3e50" stroke-width="2" marker-end="url(#dp1)"/>
+</svg>
+<p style="text-align: center; margin-top: 6px; font-size: 0.9em; color: #666;">Four noisy sources are filtered by a strict LLM judge, mixed, split, and used to train LoRA adapters over a frozen 4-bit Llama base.</p>
+</div>
+
+## Retrieval memory
+
+A model only sees what fits in its context window, so over a long session the GM starts to slip: it renames an NPC, rearranges a room it already described, or forgets who died a few scenes ago. The retrieval memory fixes this. After each GM turn, a small extractor model pulls the durable, concrete facts out of what just happened, named NPCs, places, items, promises, and relationships, formatted as one "Name, short fact" per line, and drops anything generic like mood or tension. Those facts are embedded and stored in a Chroma vector database, keyed one record per entity so the newest fact about a character overwrites the old one.
+
+On the next turn, the system embeds the current scene and player action, retrieves the most relevant stored facts, and drops them into the World state slot in the same format the model was trained on. One nice touch is a contradiction guard on relationships: the first time the memory learns that two characters are, say, siblings, it pins that kinship, and later facts that contradict it are rejected rather than silently overwriting canon. In the GUI you can watch this memory fill up live in a world bible panel as you play.
+
+<div style="max-width: 900px; margin: 26px auto;">
+<svg viewBox="0 0 900 420" role="img" aria-label="Per-turn loop: retrieve facts, assemble the prompt, generate narration, extract new facts, and store them back" style="width:100%; height:auto; font-family: Lato, Helvetica, Arial, sans-serif;">
+  <defs>
+    <marker id="rg1" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#2c3e50"/></marker>
+    <marker id="rgT" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#18bc9c"/></marker>
+  </defs>
+  <!-- top row -->
+  <rect x="20" y="40" width="150" height="66" rx="8" fill="#fff" stroke="#2c3e50" stroke-width="2"/>
+  <text x="95" y="66" text-anchor="middle" font-size="11.5" fill="#2c3e50" font-weight="700">Player action</text>
+  <text x="95" y="84" text-anchor="middle" font-size="10.5" fill="#555">+ scene</text>
+  <rect x="205" y="40" width="165" height="66" rx="8" fill="#eafaf5" stroke="#18bc9c" stroke-width="1.8"/>
+  <text x="287" y="62" text-anchor="middle" font-size="11.5" fill="#2c3e50" font-weight="700">Retrieve top-20 facts</text>
+  <text x="287" y="80" text-anchor="middle" font-size="10.5" fill="#555">into World state slot</text>
+  <rect x="405" y="32" width="170" height="82" rx="8" fill="#fff" stroke="#2c3e50" stroke-width="2"/>
+  <text x="490" y="58" text-anchor="middle" font-size="11.5" fill="#2c3e50" font-weight="700">Assemble prompt</text>
+  <text x="490" y="76" text-anchor="middle" font-size="10.5" fill="#555">system rulebook +</text>
+  <text x="490" y="90" text-anchor="middle" font-size="10.5" fill="#555">5 slots + recent history</text>
+  <rect x="610" y="32" width="180" height="82" rx="8" fill="#2c3e50"/>
+  <text x="700" y="62" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">Fine-tuned Llama</text>
+  <text x="700" y="80" text-anchor="middle" font-size="10.5" fill="#cfe9e2">3.1 8B (4-bit + LoRA)</text>
+  <text x="700" y="96" text-anchor="middle" font-size="10.5" fill="#cfe9e2">temp 0.6, rep-pen 1.15</text>
+  <!-- narration -->
+  <rect x="610" y="150" width="180" height="50" rx="8" fill="#eafaf5" stroke="#18bc9c" stroke-width="2"/>
+  <text x="700" y="180" text-anchor="middle" font-size="11.5" fill="#2c3e50" font-weight="700">GM narration to player</text>
+  <!-- extract -->
+  <rect x="360" y="150" width="190" height="50" rx="8" fill="#fdeede" stroke="#e08a2b" stroke-width="2"/>
+  <text x="455" y="172" text-anchor="middle" font-size="11.5" fill="#8a5212" font-weight="700">Extract durable facts</text>
+  <text x="455" y="189" text-anchor="middle" font-size="10.5" fill="#8a5212">gpt-4o-mini</text>
+  <!-- store -->
+  <rect x="150" y="250" width="470" height="80" rx="10" fill="#d5f3ea" stroke="#18bc9c" stroke-width="2.2"/>
+  <text x="385" y="278" text-anchor="middle" font-size="12.5" fill="#2c3e50" font-weight="700">Vector store: Chroma + MiniLM embeddings</text>
+  <text x="385" y="300" text-anchor="middle" font-size="11" fill="#2c3e50">one record per entity · newest wins · kinship-conflict guard</text>
+  <text x="385" y="318" text-anchor="middle" font-size="10.5" fill="#12876f">persists across the whole session</text>
+  <!-- world bible -->
+  <rect x="660" y="252" width="150" height="76" rx="8" fill="#fff" stroke="#2c3e50" stroke-width="1.8"/>
+  <text x="735" y="284" text-anchor="middle" font-size="11" fill="#2c3e50" font-weight="700">World bible</text>
+  <text x="735" y="301" text-anchor="middle" font-size="10.5" fill="#555">panel (live)</text>
+  <!-- arrows -->
+  <line x1="170" y1="73" x2="203" y2="73" stroke="#2c3e50" stroke-width="2" marker-end="url(#rg1)"/>
+  <line x1="370" y1="73" x2="403" y2="73" stroke="#2c3e50" stroke-width="2" marker-end="url(#rg1)"/>
+  <line x1="575" y1="73" x2="608" y2="73" stroke="#2c3e50" stroke-width="2" marker-end="url(#rg1)"/>
+  <line x1="700" y1="114" x2="700" y2="148" stroke="#2c3e50" stroke-width="2" marker-end="url(#rg1)"/>
+  <line x1="608" y1="175" x2="552" y2="175" stroke="#2c3e50" stroke-width="2" marker-end="url(#rg1)"/>
+  <line x1="450" y1="200" x2="405" y2="248" stroke="#e08a2b" stroke-width="2" marker-end="url(#rg1)"/>
+  <text x="455" y="228" text-anchor="middle" font-size="10" fill="#8a5212">store facts</text>
+  <path d="M245,250 L245,140 L287,140 L287,108" fill="none" stroke="#18bc9c" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#rgT)"/>
+  <text x="212" y="200" text-anchor="middle" font-size="10" fill="#12876f" font-weight="700">next turn</text>
+  <line x1="620" y1="290" x2="658" y2="290" stroke="#2c3e50" stroke-width="1.8" marker-end="url(#rg1)"/>
+  <text x="450" y="378" text-anchor="middle" font-size="10.5" fill="#7a8891" font-style="italic">Each turn reads from the store and then writes new facts back, so the world grows more consistent the longer you play.</text>
+</svg>
+<p style="text-align: center; margin-top: 6px; font-size: 0.9em; color: #666;">The retrieval loop that runs on every turn: pull relevant facts in, narrate, then extract and store what just happened.</p>
+</div>
+
+At inference the fine-tuned adapter is loaded back onto the 4-bit base model and sampled with a temperature of 0.6, a repetition penalty of 1.15, and a 300-token cap per turn, which keeps the narration focused and stops it from rambling past the point where the player should take over.
+
+## The GUI
+
+Everything comes together in a Gradio interface, shown at the top of this page. You set the scene and the cast (a merchant-ship scenario is preloaded), type your action, and the GM narrates the result. There are buttons to regenerate the last turn, reset the history, and clear the memory, and a world bible panel on the side that shows the retrieval memory filling up in real time as facts about the world accumulate.
+
+There is also a plain terminal client for quick testing. It runs the same fine-tuned model and the same retrieval memory, just as a REPL: you type at the `Player>` prompt, the GM narrates back, and slash commands like `/facts` print the current world bible, `/reset` clears the history, and `/forget` wipes the memory.
+
+<div style="text-align: center; margin: 20px 0;">
+  <img src="{{ site.url }}/img/portfolio/rpggen_terminal.png" class="img-responsive img-centered" alt="An example session in the terminal client, showing the Player prompt, the GM narration, and a /facts listing of the retrieval memory" style="border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.12);">
+  <p style="margin-top: 8px; font-size: 0.9em; color: #666;">An example session in the terminal client (chat.py): the same GM and retrieval memory without the GUI, with /facts printing the world bible.</p>
+</div>
